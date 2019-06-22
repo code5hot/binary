@@ -97,6 +97,7 @@ import Data.Semigroup
 #endif
 
 import Control.Applicative
+import Control.Monad.Fix
 import Prelude -- Silence AMP warning.
 
 -- needed for casting Floats/Doubles to words.
@@ -148,6 +149,9 @@ instance Monad PutM where
 
     (>>) = (*>)
     {-# INLINE (>>) #-}
+
+instance MonadFix PutM where
+    mfix f = fix (f . fst . runPutM)
 
 instance Monoid.Monoid (PutM ()) where
     mempty = pure ()
